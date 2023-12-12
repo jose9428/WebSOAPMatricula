@@ -1,0 +1,244 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="BDMatriculaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Carrera">
+    <Key>
+      <PropertyRef Name="cod_carrera" />
+    </Key>
+    <Property Name="cod_carrera" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombre_carrera" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="Curso">
+    <Key>
+      <PropertyRef Name="cod_curso" />
+    </Key>
+    <Property Name="cod_curso" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombre_curso" Type="varchar" MaxLength="100" />
+    <Property Name="creditos" Type="int" />
+    <Property Name="horas" Type="int" />
+  </EntityType>
+  <EntityType Name="DetalleMatricula">
+    <Key>
+      <PropertyRef Name="cod_detMatricula" />
+    </Key>
+    <Property Name="cod_detMatricula" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="num_matricula" Type="int" />
+    <Property Name="num_seccion" Type="int" />
+  </EntityType>
+  <EntityType Name="Estudiante">
+    <Key>
+      <PropertyRef Name="cod_estudiante" />
+    </Key>
+    <Property Name="cod_estudiante" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="cod_usuario" Type="int" />
+    <Property Name="cod_carrera" Type="int" />
+    <Property Name="apoderado" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="Matricula">
+    <Key>
+      <PropertyRef Name="num_matricula" />
+    </Key>
+    <Property Name="num_matricula" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="cod_estudiante" Type="int" />
+    <Property Name="fecha" Type="datetime" />
+    <Property Name="total_horas" Type="int" />
+    <Property Name="costo" Type="decimal" Precision="8" Scale="2" />
+    <Property Name="estado" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="Profesor">
+    <Key>
+      <PropertyRef Name="cod_profesor" />
+    </Key>
+    <Property Name="cod_profesor" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="cod_usuario" Type="int" />
+    <Property Name="direccion" Type="varchar" MaxLength="400" />
+    <Property Name="telefono" Type="char" MaxLength="15" />
+  </EntityType>
+  <EntityType Name="Rol">
+    <Key>
+      <PropertyRef Name="cod_rol" />
+    </Key>
+    <Property Name="cod_rol" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombre_rol" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Seccion">
+    <Key>
+      <PropertyRef Name="num_seccion" />
+    </Key>
+    <Property Name="num_seccion" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="cod_profesor" Type="int" />
+    <Property Name="cod_curso" Type="int" />
+    <Property Name="dia_semana" Type="varchar" MaxLength="40" />
+    <Property Name="hora_inicio" Type="time" Precision="7" />
+    <Property Name="hora_fin" Type="time" Precision="7" />
+    <Property Name="capacidad" Type="int" />
+    <Property Name="vacantes" Type="int" />
+    <Property Name="aula" Type="varchar" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="Usuario">
+    <Key>
+      <PropertyRef Name="cod_usuario" />
+    </Key>
+    <Property Name="cod_usuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombres" Type="varchar" MaxLength="100" />
+    <Property Name="apellidos" Type="varchar" MaxLength="100" />
+    <Property Name="correo" Type="varchar" MaxLength="100" />
+    <Property Name="contrasennia" Type="varchar" MaxLength="200" />
+    <Property Name="fecha_registro" Type="datetime" />
+    <Property Name="cod_rol" Type="int" />
+  </EntityType>
+  <Association Name="FK__DetalleMa__num_m__267ABA7A">
+    <End Role="Matricula" Type="Self.Matricula" Multiplicity="0..1" />
+    <End Role="DetalleMatricula" Type="Self.DetalleMatricula" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Matricula">
+        <PropertyRef Name="num_matricula" />
+      </Principal>
+      <Dependent Role="DetalleMatricula">
+        <PropertyRef Name="num_matricula" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__DetalleMa__num_s__276EDEB3">
+    <End Role="Seccion" Type="Self.Seccion" Multiplicity="0..1" />
+    <End Role="DetalleMatricula" Type="Self.DetalleMatricula" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Seccion">
+        <PropertyRef Name="num_seccion" />
+      </Principal>
+      <Dependent Role="DetalleMatricula">
+        <PropertyRef Name="num_seccion" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Estudiant__cod_c__1920BF5C">
+    <End Role="Carrera" Type="Self.Carrera" Multiplicity="0..1" />
+    <End Role="Estudiante" Type="Self.Estudiante" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Carrera">
+        <PropertyRef Name="cod_carrera" />
+      </Principal>
+      <Dependent Role="Estudiante">
+        <PropertyRef Name="cod_carrera" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Estudiant__cod_u__1A14E395">
+    <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
+    <End Role="Estudiante" Type="Self.Estudiante" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Usuario">
+        <PropertyRef Name="cod_usuario" />
+      </Principal>
+      <Dependent Role="Estudiante">
+        <PropertyRef Name="cod_usuario" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Matricula__cod_e__239E4DCF">
+    <End Role="Estudiante" Type="Self.Estudiante" Multiplicity="0..1" />
+    <End Role="Matricula" Type="Self.Matricula" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Estudiante">
+        <PropertyRef Name="cod_estudiante" />
+      </Principal>
+      <Dependent Role="Matricula">
+        <PropertyRef Name="cod_estudiante" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Profesor__cod_us__1CF15040">
+    <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
+    <End Role="Profesor" Type="Self.Profesor" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Usuario">
+        <PropertyRef Name="cod_usuario" />
+      </Principal>
+      <Dependent Role="Profesor">
+        <PropertyRef Name="cod_usuario" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Seccion__cod_cur__20C1E124">
+    <End Role="Curso" Type="Self.Curso" Multiplicity="0..1" />
+    <End Role="Seccion" Type="Self.Seccion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Curso">
+        <PropertyRef Name="cod_curso" />
+      </Principal>
+      <Dependent Role="Seccion">
+        <PropertyRef Name="cod_curso" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Seccion__cod_pro__1FCDBCEB">
+    <End Role="Profesor" Type="Self.Profesor" Multiplicity="0..1" />
+    <End Role="Seccion" Type="Self.Seccion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Profesor">
+        <PropertyRef Name="cod_profesor" />
+      </Principal>
+      <Dependent Role="Seccion">
+        <PropertyRef Name="cod_profesor" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Usuario__cod_rol__164452B1">
+    <End Role="Rol" Type="Self.Rol" Multiplicity="0..1" />
+    <End Role="Usuario" Type="Self.Usuario" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Rol">
+        <PropertyRef Name="cod_rol" />
+      </Principal>
+      <Dependent Role="Usuario">
+        <PropertyRef Name="cod_rol" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="BDMatriculaModelStoreContainer">
+    <EntitySet Name="Carrera" EntityType="Self.Carrera" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Curso" EntityType="Self.Curso" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DetalleMatricula" EntityType="Self.DetalleMatricula" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Estudiante" EntityType="Self.Estudiante" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Matricula" EntityType="Self.Matricula" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Profesor" EntityType="Self.Profesor" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Rol" EntityType="Self.Rol" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Seccion" EntityType="Self.Seccion" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK__DetalleMa__num_m__267ABA7A" Association="Self.FK__DetalleMa__num_m__267ABA7A">
+      <End Role="Matricula" EntitySet="Matricula" />
+      <End Role="DetalleMatricula" EntitySet="DetalleMatricula" />
+    </AssociationSet>
+    <AssociationSet Name="FK__DetalleMa__num_s__276EDEB3" Association="Self.FK__DetalleMa__num_s__276EDEB3">
+      <End Role="Seccion" EntitySet="Seccion" />
+      <End Role="DetalleMatricula" EntitySet="DetalleMatricula" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Estudiant__cod_c__1920BF5C" Association="Self.FK__Estudiant__cod_c__1920BF5C">
+      <End Role="Carrera" EntitySet="Carrera" />
+      <End Role="Estudiante" EntitySet="Estudiante" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Estudiant__cod_u__1A14E395" Association="Self.FK__Estudiant__cod_u__1A14E395">
+      <End Role="Usuario" EntitySet="Usuario" />
+      <End Role="Estudiante" EntitySet="Estudiante" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Matricula__cod_e__239E4DCF" Association="Self.FK__Matricula__cod_e__239E4DCF">
+      <End Role="Estudiante" EntitySet="Estudiante" />
+      <End Role="Matricula" EntitySet="Matricula" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Profesor__cod_us__1CF15040" Association="Self.FK__Profesor__cod_us__1CF15040">
+      <End Role="Usuario" EntitySet="Usuario" />
+      <End Role="Profesor" EntitySet="Profesor" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Seccion__cod_cur__20C1E124" Association="Self.FK__Seccion__cod_cur__20C1E124">
+      <End Role="Curso" EntitySet="Curso" />
+      <End Role="Seccion" EntitySet="Seccion" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Seccion__cod_pro__1FCDBCEB" Association="Self.FK__Seccion__cod_pro__1FCDBCEB">
+      <End Role="Profesor" EntitySet="Profesor" />
+      <End Role="Seccion" EntitySet="Seccion" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Usuario__cod_rol__164452B1" Association="Self.FK__Usuario__cod_rol__164452B1">
+      <End Role="Rol" EntitySet="Rol" />
+      <End Role="Usuario" EntitySet="Usuario" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
